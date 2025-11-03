@@ -132,7 +132,7 @@ a) Folder -> Bucket used to store the Cloud Functions source code folders
 
 #### <br> One Separate Docker Artifact Registry managed service: this has Docker container repository to store the latest image containing the Python code for Model Training
 
----
+----
 
 #### <br> 3.3.2. BigQuery: 
 1. Four main BigQuery Datasets:
