@@ -91,7 +91,7 @@ This Dataform SQLX script File read the latest state snapshot data from the Stag
 ---
 
 ##  <br> 🚀 3. MLOps Training Pipeline & Automation
-The Files that contained the logic for running the end-to-end MLOps Pipeline were a combination of a JupyterLab Notebook with Python Code, a Machine Learking Model Training Pythin Code file, a Docker file, a Python dependencies File and the Custom Job Configuration File. 
+The Files that contained the logic for running the end-to-end MLOps Pipeline were a combination of a JupyterLab Notebook with Python Code, a Machine Learning Model Training Python Code file, a Docker file, a Python dependencies File and the Custom Job Configuration File.
 
 ### <br> 3.1. JupyterLab Notebook: rainy_days_ml_prototype.ipynb
 This interactive Notebook was the development lab for prototyping the end‑to‑end ML workflow.  
@@ -160,5 +160,42 @@ This YAML file defined the runtime configuration for launching the training job 
 - **Dockerfile + requirements.txt** → Packaged the training environment into a container image stored in Artifact Registry.  
 - **config.yaml** → Defined the execution environment and launched the container as a Vertex AI Custom Job.  
 - **Outputs** → Model artifact saved to the Gold Layer → Registered in Vertex AI Model Registry → Consumed by Batch Prediction jobs → Predictions written back into BigQuery for BI dashboards.
+
+---
+
+##  <br> 🚀 3. Automation Glue Logic (Serverless Orchestration)
+This section details the critical glue code that eliminated manual intervention from the pipeline by programmatically chaining the Ingestion flow, the Dataform ELT process, and the Vertex AI MLOps scoring job using Cloud Scheduler and dedicated Cloud Functions. This design ensures the entire end-to-end data flow is self-triggering, reliable, and decoupled.
+
+The automation relies on two main Python scripts packaged into distinct, authenticated Cloud Functions (Gen 2):
+
+### <br> 4.1. ELT Automation Runner:
+This function is responsible for ensuring the transformed data is ready in the Data Warehouse shortly after new raw data lands in the Bronze Layer.
+
+- Trigger: Launched by the dedicated ELT Cloud Scheduler Job, which is set to run automatically 30 minutes after the Ingestion Scheduler Job.
+
+- Identity: Runs as the Dataform ELT Service Account, which possesses the necessary permissions (roles/dataform.editor) to interact with the Dataform API.
+
+- Logic in the Script:
+- - Utilizes the google-cloud-dataform client library.
+- - The Python code programmatically constructs a request to the Dataform API, targeting the latest code within the defined Dataform workspace.
+- - It calls the client.create_workflow_invocation method to trigger an asynchronous run, launching the entire 10-script ELT pipeline—from reading the Bronze External Table through to loading the final Fact and Dimension tables in the BigQuery Data Warehouse.
+
+- Purpose: This entirely eliminates the manual execution step of the Dataform pipeline, ensuring immediate data transformation readiness once the raw files are present.
+
+
+### <br> 4.2. MLOps Batch Scorer: prediction_trigger_main.py
+This function is responsible for launching the daily predictive scoring run using the trained model, completing the MLOps automation loop.
+
+- Trigger: Launched by the dedicated MLOps Cloud Scheduler Job, which is scheduled to run daily (e.g., 1 AM UTC).
+
+- Identity: Runs as the ML Prediction Service Account, which has the roles/aiplatform.user role to launch Vertex AI jobs and the roles/bigquery.dataEditor role to write results to the DWH.
+
+- Logic in the Script:
+- - Uses the google-cloud-aiplatform SDK.
+- - The script first queries the Vertex AI Model Registry to find the latest version of the registered car failure model.
+- - It then defines and submits a Vertex AI Batch Prediction Job by calling aiplatform.BatchPredictionJob.create.
+- - The job is configured to use the fact_telemetry_latest table in the BigQuery DWH as its input source and the DWH dataset as its output sink.
+
+- Purpose: This fully automates the daily prediction and scoring process, ensuring the Looker Studio dashboards always display fresh, ML-generated risk scores without any human intervention.
 
 ---
