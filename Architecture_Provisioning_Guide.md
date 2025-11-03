@@ -114,23 +114,23 @@ One Dataplex Lake and Four Data Zones: Raw, Curated, Product and Analytics. Esta
 ### <br> List of All Folders and File Artifacts in Google Cloud Storage Buckets: 
 A comprehensive list of all the Folders and File Artifacts in Google Cloud Storage Buckets and their purpose: 
 
-### <br> GCS Bronze Layer: 
+#### <br> GCS Bronze Layer: 
 a) Folder -> Raw Ingested Storage -> Stored the raw, immutable JSONL files as they are ingested from the Cloud Function Loader
 
-### <br> GCS Silver Layer: 
+#### <br> GCS Silver Layer: 
 a) Folder -> Cleaned & Standardized Storage -> Stored the cleaned, standardized, individual record Parquet files and was used as the primary source for ML model training 
 
-### <br> GCS Gold Layer: 
+#### <br> GCS Gold Layer: 
 a) Folder -> Aggregation Storage -> Bucket used to store the aggregated hourly Parquet files
 <br> b) Folder -> Last Known State Storage-> Bucket used to store the latest known state Parquet files for each master data
 <br> c) Folder -> MLOps Artifacts -> Bucket used to store the model artifacts saved by the Training Job before being registered in the Vertex AI Model Registry
 <br> d) Folder -> Vertex AI's staging area -> Bucket used by the Vertex AI pipeline to store intermediate artifacts, logs, and compiled pipeline metadata
 
-### <br> System-Generated Google Cloud Storage Buckets: 
+#### <br> System-Generated Google Cloud Storage Buckets: 
 a) Folder -> Bucket used to store the Cloud Functions source code folders
 <br> b) Folder -> Bucket used to store the temporary build and deployment artifacts (zipped files) created during the deployment process 
 
-### <br> One Separate Docker Artifact Registry managed service: this has Docker container repository to store the latest image containing the Python code for Model Training
+#### <br> One Separate Docker Artifact Registry managed service: this has Docker container repository to store the latest image containing the Python code for Model Training
 
 ---
 
