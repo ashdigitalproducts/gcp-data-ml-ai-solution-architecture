@@ -78,14 +78,87 @@ This Dataform SQLX script File read the latest state snapshot data from the Stag
 
 ---
 
+### <br> 2.11. End-to-End Flow
+- **Source Declaration (SQLX)** → Declared the external table over Bronze Layer JSONL files, providing a persistent SQL interface for raw ingested data.  
+- **Bronze → Silver Transformation (SQLX)** → Applied cleaning, standardization, type casting, and deduplication rules to produce curated Silver tables.  
+- **Silver → GCS Export (SQLX)** → Executed `EXPORT DATA` commands to write cleaned Silver tables into the GCS Silver Layer as partitioned Parquet files for ML feature engineering.  
+- **Silver → Gold Aggregation (SQLX)** → Performed hourly aggregations and state tracking on curated Silver data to generate intermediate Gold tables.  
+- **Gold → GCS Export (SQLX)** → Exported aggregated and latest state Gold tables into the GCS Gold Layer as Parquet files for BI and reporting.  
+- **Silver → Dimension & Fact Modeling (SQLX)** → Created Dimension tables and loaded Fact Hourly and Fact Latest tables into the BigQuery Data Warehouse.  
+- **Outputs** → Curated Parquet files in Silver and Gold Layers → Dimension and Fact tables in the Data Warehouse → Canonical data sources for Looker Studio dashboards and downstream MLOps pipelines.
+
+
+---
+
 ##  <br> 🚀 3. MLOps Training Pipeline & Automation
 The Files that contained the logic for running the end-to-end MLOps Pipeline were a combination of a JupyterLab Notebook with Python Code, a Machine Learking Model Training Pythin Code file, a Docker file, a Python dependencies File and the Custom Job Configuration File. 
 
+### <br> 3.1. JupyterLab Notebook: rainy_days_ml_prototype.ipynb
+This interactive Notebook was the development lab for prototyping the end‑to‑end ML workflow.  
+<br> **Logic in the Notebook Cells:**  
+- Connected to BigQuery and GCS to pull curated telemetry data.  
+- Performed exploratory data analysis (EDA) to inspect schema, distributions, and missing values.  
+- Engineered prototype features (rolling averages, categorical encodings, lag features).  
+- Trained a `RandomForestClassifier` on a sample dataset and evaluated performance with accuracy, ROC, and confusion matrix.  
+- Submitted a one‑off Batch Prediction job using the Vertex AI Python SDK (`aiplatform.BatchPredictionJob.create`) to validate integration with BigQuery.  
+- Served as the scratchpad for experimentation before productionizing the logic into `train.py`.
 
-### <br> 3.1. JupyterLab Notebook with Python Code File for Source Declaration: 
-This  
+---
 
+### <br> 3.2. Training Code Blueprint: train.py
+This Python script was the production‑ready training entrypoint.  
+<br> **Logic in the Script:**  
+- Parsed command‑line arguments for input paths, output paths, and project/region parameters.  
+- Loaded cleaned Parquet files from the Silver Layer (via GCSFS or BigQuery).  
+- Applied deterministic feature engineering: type casting, scaling, encoding, and feature selection.  
+- Trained a `RandomForestClassifier` with fixed random seeds for reproducibility.  
+- Evaluated the model on a validation split and logged metrics.  
+- Serialized the trained model with `joblib.dump()` into a local `/model` directory.  
+- Uploaded the serialized artifact to the Gold Layer bucket under `model_output/`.  
+- Registered the artifact into the Vertex AI Model Registry as a new version under the display name.
 
+---
 
+### <br> 3.3. Container Instructions: Dockerfile
+This file defined the container environment for the training job.  
+<br> **Logic in the Dockerfile:**  
+- Started from a lightweight Python base image (e.g., `python:3.9-slim`).  
+- Copied `requirements.txt` into the image and installed dependencies with `pip install -r requirements.txt`.  
+- Copied `train.py` into the working directory.  
+- Set the container entrypoint to `python train.py` so Vertex AI Custom Jobs could pass runtime arguments.  
+- Guaranteed reproducibility and portability of the training environment.
+
+---
+
+### <br> 3.4. Dependency List: requirements.txt
+This file specified all Python dependencies required for training and integration.  
+<br> **Logic in the File:**  
+- `scikit-learn` for the RandomForestClassifier.  
+- `pandas` and `numpy` for data manipulation and numerical operations.  
+- `gcsfs` for reading/writing directly to GCS.  
+- `google-cloud-aiplatform` for model registration and job submission.  
+- `joblib` for model serialization.  
+- Ensured consistent, pinned versions to avoid runtime incompatibilities.
+
+---
+
+### <br> 3.5. Custom Job Configuration: config.yaml
+This YAML file defined the runtime configuration for launching the training job on Vertex AI.  
+<br> **Logic in the File:**  
+- Declared job metadata: job name, display name, and labels.  
+- Specified machine type (`n1-standard-4`) for CPU‑based training.  
+- Referenced the container image URI in Artifact Registry built from the Dockerfile.  
+- Defined input paths (Silver Layer or BigQuery dataset) and output paths (Gold Layer for artifacts).  
+- Bound the runtime Service Account with `aiplatform.user` and `storage.objectAdmin` roles.  
+- Provided Vertex AI with all parameters to execute `train.py` inside the container.
+
+---
+
+### <br> 3.6. End-to-End Flow
+- **Notebook (`rainy_days_ml_prototype.ipynb`)** → Feature discovery, prototyping, and validation.  
+- **Training Script (`train.py`)** → Productionized training logic with reproducible feature engineering and model saving.  
+- **Dockerfile + requirements.txt** → Packaged the training environment into a container image stored in Artifact Registry.  
+- **config.yaml** → Defined the execution environment and launched the container as a Vertex AI Custom Job.  
+- **Outputs** → Model artifact saved to the Gold Layer → Registered in Vertex AI Model Registry → Consumed by Batch Prediction jobs → Predictions written back into BigQuery for BI dashboards.
 
 ---
