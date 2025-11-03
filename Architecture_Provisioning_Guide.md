@@ -1,12 +1,12 @@
 # 🏛️ Full Architecture Provisioning Guide
 The following cleary describes all the GCP Services and Resources provisoned for this Poject. 
 
-## 🚀 <br> 1. Cloud Project Configuration: 
+## <br> 🚀 1. Cloud Project Configuration: 
 Setup the GCP Project and set the regional context to the target Region for all subsequent deployments.
 
 ---
 
-## 🚀 <br> 2. API Enablement: 
+## <br> 🚀 2. API Enablement: 
 Enable all necessary APIs such as: 
 <br>a) **Data Lake Storage** ->	Cloud Storage API	-> `storage.googleapis.com`
 <br>b) **Real-Time Orchestration** -> Cloud Functions API -> `cloudfunctions.googleapis.com`
@@ -26,11 +26,11 @@ Enable all necessary APIs such as: 
 
 ---
 
-## 🚀 <br> 3. GCP Services and Resources: 
+## <br> 🚀 3. GCP Services and Resources: 
 Plan out the GCP Services and Resources which would meet the requirements, the GCP Services and Resources are as follows: 
 
 
-## ⚙️ <br> 3.1. Service Accounts, Roles and IAM Bindings: 
+##<br> ⚙️ 3.1. Service Accounts, Roles and IAM Bindings: 
 
 #### <br> 3.1.1. Ingestion Scheduling: Triggers the start of the data flow.
 Roles: 
@@ -50,7 +50,7 @@ Roles: 
 <br>* roles/storage.objectAdmin on GCS Silver Layer
 <br>* roles/storage.objectAdmin on GCS Gold Layer 
 
-#### 🔄 <br> 3.1.5. Data Transformation: Enables Dataform to run queries and manage tables.
+#### <br> 3.1.5. Data Transformation: Enables Dataform to run queries and manage tables.
 Roles: 
 <br>* roles/bigquery.dataViewer on BigQuery Bronze Dataset
 <br>* roles/bigquery.dataEditor on BigQuery Staging Dataset
@@ -91,12 +91,12 @@ Roles: 
 
 ---
 
-## 🛡️ <br> 3.2. Data Governance Layer: 
+##<br> 🛡️ 3.2. Data Governance Layer: 
 One Dataplex Lake and Four Data Zones: Raw, Curated, Product and Analytics. Established a central data fabric for automated metadata cataloging, discovery, and governance. 
 
 ---
 
-##  💾 <br> 3.3. Core Data Infrastructure:
+## <br> 💾 3.3. Core Data Infrastructure:
 
 ### <br> 3.3.1. Google Cloud Storage:
 1. Three main Google Cloud Storage Buckets for the Data Lakehouse Medallion Architecture with Bronze Layer, Silver Layer and Gold Layer. 
@@ -163,7 +163,7 @@ a) Table 1: A Dimension Table storing static or slowly changing attributes for m
 
 ---
 
-## 📥 <br> 3.4. Real-Time Data Ingestion:
+## <br> 📥 3.4. Real-Time Data Ingestion:
 A. One Cloud Scheduler Job to trigger the Data Ingestion Automation flow at regular intervals. 
 <br>B. One Cloud Function (Gen 2) that Simulates source data at regular intervals. Cloud Function is triggered by the Cloud Scheduler. 
 <br>C. One Pub/Sub Topic that Receives JSON messages from the Simulator Cloud Function. 
@@ -179,7 +179,7 @@ A. One Cloud Scheduler Job to trigger the Data Ingestion Automation flow at regu
 
 ---
 
-## 🎯 <br> 3.5. MLOps Layer:
+## <br> 🎯 3.5. MLOps Layer:
 A. One Cloud Scheduler Job to trigger MLOps Pipeline Automation of Batch Prediction and Scoring. 
 <br>B. One Cloud Function (Gen 2) that is triggered by the Cloud Scheduler Job and performs the MLOps Pipeline Automation of Batch Prediction and Scoring. 
 <br>C. One Vertex AI Workbench Instance with One JupyterLab Notebook. 
@@ -189,12 +189,12 @@ A. One Cloud Scheduler Job to trigger MLOps Pipeline Automation of Batch Predict
 
 ---
 
-## 📊 <br> 3.6. Business Intelligence Layer: 
+## <br> 📊 3.6. Business Intelligence Layer: 
 One Looker Studio Dashboard to display pre-MLOps data visualizations such as trends and current status and post-MLOps data visualizations such as predictions, classifications and risk scores
 
 ---
 
-## 🤖 <br> 3.7. AI Agent Layer: 
+## <br> 🤖 3.7. AI Agent Layer: 
 
 Two AI Agents built using Vertex AI Studio UI: 
 
