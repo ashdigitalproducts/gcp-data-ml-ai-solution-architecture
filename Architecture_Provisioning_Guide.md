@@ -30,7 +30,7 @@ Enable all necessary APIs such as: 
 Plan out the GCP Services and Resources which would meet the requirements, the GCP Services and Resources are as follows: 
 
 
-##<br> ⚙️ 3.1. Service Accounts, Roles and IAM Bindings: 
+### <br> ⚙️ 3.1. Service Accounts, Roles and IAM Bindings: 
 
 #### <br> 3.1.1. Ingestion Scheduling: Triggers the start of the data flow.
 Roles: 
@@ -91,14 +91,14 @@ Roles: 
 
 ---
 
-## <br> 🛡️ 3.2. Data Governance Layer: 
+### <br> 🛡️ 3.2. Data Governance Layer: 
 One Dataplex Lake and Four Data Zones: Raw, Curated, Product and Analytics. Established a central data fabric for automated metadata cataloging, discovery, and governance. 
 
 ---
 
-## <br> 💾 3.3. Core Data Infrastructure:
+### <br> 💾 3.3. Core Data Infrastructure:
 
-### <br> 3.3.1. Google Cloud Storage:
+#### <br> 3.3.1. Google Cloud Storage:
 1. Three main Google Cloud Storage Buckets for the Data Lakehouse Medallion Architecture with Bronze Layer, Silver Layer and Gold Layer. 
 	<br> a) GCS Bronze Layer: Raw, immutable, ingested JSONL files 
 	<br> b) GCS Silver Layer: Cleaned, validated, and partitioned detail records in Parquet files for ML feature engineering
@@ -111,7 +111,7 @@ One Dataplex Lake and Four Data Zones: Raw, Curated, Product and Analytics. Esta
 3. One Separate Docker Artifact Registry managed service: this has Docker container repository to store the latest image containing the Python code for Model Training
 
 
-### <br> List of All Folders and File Artifacts in Google Cloud Storage Buckets: 
+#### <br> List of All Folders and File Artifacts in Google Cloud Storage Buckets: 
 A comprehensive list of all the Folders and File Artifacts in Google Cloud Storage Buckets and their purpose: 
 
 #### <br> GCS Bronze Layer: 
@@ -134,14 +134,14 @@ a) Folder -> Bucket used to store the Cloud Functions source code folders
 
 ---
 
-### <br> 3.3.2. BigQuery: 
+#### <br> 3.3.2. BigQuery: 
 1. Four main BigQuery Datasets:
     <br> a) Bronze Dataset: Housed the External Table providing a persistent SQL interface for querying the raw JSONL files directly from Bronze Layer
 	<br> b) Staging Dataset: A temporary holding area making the data ready for final loading and modeling into the Data Warehouse
 	<br> c) Data Warehouse Dataset: The actual BigQuery Data Warehouse, serving as the primary source for Looker Studio dashboards and MLOps Output Sink
 	<br> d) Dataplex Zone Datasets: automatically generated datasets created by Dataplex when GCS Buckets and BQ Datasets are attached to their respective Dataplex Zones
 
-### <br> List of all BigQuery Tables: 
+#### <br> List of all BigQuery Tables: 
 A comprehensive list of all the BigQuery Tables and their purpose: 
 
 #### Tables in Bronze Dataset: 
@@ -163,7 +163,7 @@ a) Table 1: A Dimension Table storing static or slowly changing attributes for m
 
 ---
 
-## <br> 📥 3.4. Real-Time Data Ingestion:
+### <br> 📥 3.4. Real-Time Data Ingestion:
 A. One Cloud Scheduler Job to trigger the Data Ingestion Automation flow at regular intervals. 
 <br>B. One Cloud Function (Gen 2) that Simulates source data at regular intervals. Cloud Function is triggered by the Cloud Scheduler. 
 <br>C. One Pub/Sub Topic that Receives JSON messages from the Simulator Cloud Function. 
@@ -179,7 +179,7 @@ A. One Cloud Scheduler Job to trigger the Data Ingestion Automation flow at regu
 
 ---
 
-## <br> 🎯 3.5. MLOps Layer:
+### <br> 🎯 3.5. MLOps Layer:
 A. One Cloud Scheduler Job to trigger MLOps Pipeline Automation of Batch Prediction and Scoring. 
 <br>B. One Cloud Function (Gen 2) that is triggered by the Cloud Scheduler Job and performs the MLOps Pipeline Automation of Batch Prediction and Scoring. 
 <br>C. One Vertex AI Workbench Instance with One JupyterLab Notebook. 
@@ -189,12 +189,12 @@ A. One Cloud Scheduler Job to trigger MLOps Pipeline Automation of Batch Predict
 
 ---
 
-## <br> 📊 3.6. Business Intelligence Layer: 
+### <br> 📊 3.6. Business Intelligence Layer: 
 One Looker Studio Dashboard to display pre-MLOps data visualizations such as trends and current status and post-MLOps data visualizations such as predictions, classifications and risk scores
 
 ---
 
-## <br> 🤖 3.7. AI Agent Layer: 
+### <br> 🤖 3.7. AI Agent Layer: 
 
 Two AI Agents built using Vertex AI Studio UI: 
 
