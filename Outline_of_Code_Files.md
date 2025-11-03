@@ -9,14 +9,14 @@ The following provides an outline to all the Code Files that were created for th
 ##  <br> 🚀 1. Data Ingestion Cloud Functions
 
 ### <br> 1. Synthetic Data Generation Logic in Main Python File and its Python dependencies File: 
-There were 2 .txt format files with Python Code in them. 
-The Main Python File contained the code to generate Synthetic Data and publish Event Messages to the Pub/Sub Topic. 
-The Requirements File contained the Python dependencies to support the Main Python File. 
+<br> There were 2 .txt format files with Python Code in them. 
+<br> The Main Python File contained the code to generate Synthetic Data and publish Event Messages to the Pub/Sub Topic. 
+<br> The Requirements File contained the Python dependencies to support the Main Python File. 
 
 ### <br> 2. Consuming and Loading Messages Logic in Main Python File and its Python dependencies File: 
-There were 2 .txt format files with Python Code in them. 
-The Main Python File contained the code to consume the Messages from Pub/Sub Subscription and write JSON files to the Cloud Storage Bucket - Bronze Layer. 
-The Requirements File contained the Python dependencies to support the Main Python File. 
+<br> There were 2 .txt format files with Python Code in them. 
+<br> The Main Python File contained the code to consume the Messages from Pub/Sub Subscription and write JSON files to the Cloud Storage Bucket - Bronze Layer. 
+<br> The Requirements File contained the Python dependencies to support the Main Python File. 
 
 ### <br> 3. 
 ### <br> 4. 
