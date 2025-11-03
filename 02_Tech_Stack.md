@@ -1,4 +1,4 @@
-# 🚀 Techn Stack  
+# 🚀 Tech Stack  
 
 This section details the core technologies, **Google Cloud services**, and supporting infrastructure used to build and operate this MLOps platform, from data ingestion and transformation to model training and deployment.
 
