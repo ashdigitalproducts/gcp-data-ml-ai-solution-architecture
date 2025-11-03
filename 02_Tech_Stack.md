@@ -52,7 +52,7 @@ We rely on established Python libraries for both **Core ML/Data Science** and se
 ### Cloud Integration & Automation
 * **google-cloud-aiplatform:** The primary **Vertex AI SDK** for programmatically managing the MLOps workflow: submitting Custom Training Jobs, registering models, and launching Batch Prediction Jobs.
 * **gcsfs:** Enables **direct read/write** operations between pandas DataFrames and Google Cloud Storage (e.g., loading Parquet from Silver/Gold layers).
-* **pandas-gbq:** Facilitates writing pandas DataFrames **directly into BigQuery tables** (e.g., `fact_predictions_car_failure`).
+* **pandas-gbq:** Facilitates writing pandas DataFrames **directly into BigQuery tables**.
 * **faker & uuid:** Used together for **generating synthetic telemetry data** and creating unique prediction IDs for traceability during simulation.
 
 ### Supporting Infrastructure (Planned Enhancements)
