@@ -54,3 +54,5 @@ While the production data layers (Bronze/Silver/Gold) are manageable, older depl
 * **Expand AI Agent Capabilities:** Fully implement the conversational flow for the **BI Analyst Agent** and **Data Governance Agent**, ensuring they can correctly interpret natural language and execute BQ SQL / Dataplex API calls securely.
 * **ML Model Integration:** Integrate the remaining three ML models (Regression, Time Series, Clustering) into the Vertex AI Pipeline to produce the **`fact_predictions_next_hour_speed`**, **`fact_forecasts_engine_temp`**, and **`dim_car_behavior_cluster`** tables.
 * **Real-Time Scoring:** Deploy the ML model to a **Vertex AI Endpoint** for low-latency, real-time scoring, enabling future application features that require immediate failure risk assessment.
+
+***
