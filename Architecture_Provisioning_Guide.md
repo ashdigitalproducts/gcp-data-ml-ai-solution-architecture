@@ -91,7 +91,7 @@ Roles: 
 
 ---
 
-##<br> 🛡️ 3.2. Data Governance Layer: 
+## <br> 🛡️ 3.2. Data Governance Layer: 
 One Dataplex Lake and Four Data Zones: Raw, Curated, Product and Analytics. Established a central data fabric for automated metadata cataloging, discovery, and governance. 
 
 ---
@@ -135,8 +135,8 @@ a) Folder -> Bucket used to store the Cloud Functions source code folders
 ---
 
 ### <br> 3.3.2. BigQuery: 
-  1. Four main BigQuery Datasets:
-  a) Bronze Dataset: Housed the External Table providing a persistent SQL interface for querying the raw JSONL files directly from Bronze Layer
+1. Four main BigQuery Datasets:
+    <br> a) Bronze Dataset: Housed the External Table providing a persistent SQL interface for querying the raw JSONL files directly from Bronze Layer
 	<br> b) Staging Dataset: A temporary holding area making the data ready for final loading and modeling into the Data Warehouse
 	<br> c) Data Warehouse Dataset: The actual BigQuery Data Warehouse, serving as the primary source for Looker Studio dashboards and MLOps Output Sink
 	<br> d) Dataplex Zone Datasets: automatically generated datasets created by Dataplex when GCS Buckets and BQ Datasets are attached to their respective Dataplex Zones
