@@ -32,25 +32,25 @@ Plan out the GCP Services and Resources which would meet the requirements, the G
 
 ## <br> 3.1. Service Accounts, Roles and IAM Bindings: 
 
-### <br> 3.1.1. Ingestion Scheduling: Triggers the start of the data flow.
+#### <br> 3.1.1. Ingestion Scheduling: Triggers the start of the data flow.
 Roles: 
 <br>* roles/run.invoker
 
-### <br> 3.1.2. Data Generation: Runs the Simulator Function and publishes raw data. 
+#### <br> 3.1.2. Data Generation: Runs the Simulator Function and publishes raw data. 
 Roles: 
 <br>* roles/pubsub.publisher
 
-### <br> 3.1.3. Data Loading: Runs the Loader Function and writes files to the Lake.
+#### <br> 3.1.3. Data Loading: Runs the Loader Function and writes files to the Lake.
 Roles: 
 <br>* roles/storage.objectCreator
 
-### <br> 3.1.4. ELT Pipeline Orchestration: Orchestrates transformations and moves data through the Medallion Layers.
+#### <br> 3.1.4. ELT Pipeline Orchestration: Orchestrates transformations and moves data through the Medallion Layers.
 Roles: 
 <br>* roles/storage.objectViewer on GCS Bronze Layer 
 <br>* roles/storage.objectAdmin on GCS Silver Layer
 <br>* roles/storage.objectAdmin on GCS Gold Layer 
 
-### <br> 3.1.5. Data Transformation: Enables Dataform to run queries and manage tables.
+#### <br> 3.1.5. Data Transformation: Enables Dataform to run queries and manage tables.
 Roles: 
 <br>* roles/bigquery.dataViewer on BigQuery Bronze Dataset
 <br>* roles/bigquery.dataEditor on BigQuery Staging Dataset
@@ -58,7 +58,7 @@ Roles: 
 <br>* roles/bigquery.jobUser on the Project
 <br>* roles/bigquery.connectionUser on the Project
 
-### <br> 3.1.6. ML Development: Default identity for the Vertex AI Workbench and pipeline execution.
+#### <br> 3.1.6. ML Development: Default identity for the Vertex AI Workbench and pipeline execution.
 Roles: 
 <br>* roles/storage.objectViewer on GCS Silver Layer (to read training data)
 <br>* roles/storage.objectAdmin on GCS Gold Layer (for MLOps artifacts)
@@ -69,20 +69,20 @@ Roles: 
 <br>* roles/artifactregistry.admin on the Project (to push Docker images)
 <br>* roles/iam.serviceAccountUser on the AI Agent Service Account (to deploy the agent)
 
-### <br> 3.1.7. ML Prediction: Runs Vertex AI Batch Prediction jobs.
+#### <br> 3.1.7. ML Prediction: Runs Vertex AI Batch Prediction jobs.
 Roles: 
 <br>* rainy-days-vertex-predict-sa (The "Prediction Runner")
 <br>* roles/aiplatform.user on the Project (to run prediction jobs)
 <br>* roles/bigquery.dataEditor on BigQuery Data Warehouse Dataset (to write prediction results)
 
-### <br> 3.1.8. Governance and DLP: Used by Dataplex for metadata scanning and PII detection.
+#### <br> 3.1.8. Governance and DLP: Used by Dataplex for metadata scanning and PII detection.
 Roles: 
 <br>* rainy-days-dataplex-sa (The "Data Steward")
 <br>* roles/storage.objectViewer on GCS Bronze, Silver, and Gold Layers
 <br>* roles/dlp.user on the Project (to run PII scans)
 <br>* roles/bigquery.metadataViewer on BigQuery Bronze, Staging and Data Warehouse Datasets
 
-### <br> 3.1.9. Gen AI Agent: Provides the secure identity for the AI Agents to execute their work. 
+#### <br> 3.1.9. Gen AI Agent: Provides the secure identity for the AI Agents to execute their work. 
 Roles: 
 <br>* roles/bigquery.dataViewer on the BigQuery Data Warehouse Dataset (for the BI Agent tool)
 <br>* roles/datacatalog.viewer on the Project (for the Governance Agent tool)
@@ -98,7 +98,7 @@ One Dataplex Lake and Four Data Zones: Raw, Curated, Product and Analytics. Esta
 
 ## <br> 3.3. Core Data Infrastructure:
 
-## <br> 3.3.1. Google Cloud Storage:
+### <br> 3.3.1. Google Cloud Storage:
 1. Three main Google Cloud Storage Buckets for the Data Lakehouse Medallion Architecture with Bronze Layer, Silver Layer and Gold Layer. 
 	<br> a) GCS Bronze Layer: Raw, immutable, ingested JSONL files 
 	<br> b) GCS Silver Layer: Cleaned, validated, and partitioned detail records in Parquet files for ML feature engineering
@@ -134,7 +134,7 @@ a) Folder -> Bucket used to store the Cloud Functions source code folders
 
 ---
 
-## <br> 3.3.2. BigQuery: 
+### <br> 3.3.2. BigQuery: 
   1. Four main BigQuery Datasets:
   a) Bronze Dataset: Housed the External Table providing a persistent SQL interface for querying the raw JSONL files directly from Bronze Layer
 	<br> b) Staging Dataset: A temporary holding area making the data ready for final loading and modeling into the Data Warehouse
@@ -144,15 +144,15 @@ a) Folder -> Bucket used to store the Cloud Functions source code folders
 ### <br> List of all BigQuery Tables: 
 A comprehensive list of all the BigQuery Tables and their purpose: 
 
-### Tables in Bronze Dataset: 
+#### Tables in Bronze Dataset: 
 a) Table 1: A BigQuery External Table used by Dataform to Read Data directly from the Bronze Layer JSONL files, it did not store any data, but only stored the table's schema and a pointer (URI) to the Bronze Layer files as it provided a persistent SQL query interface over the raw data in Bronze Layer JSONL files
 
-### Tables in Staging Dataset: 
+#### Tables in Staging Dataset: 
 a) Table 1: A Temporary table used by Dataform during ELT to hold the cleaned, standardized, and de-duplicated individual records before exporting to GCS Silver Layer
 <br> b) Table 2: A Temporary table used by Dataform to hold the hourly aggregated metrics before exporting to GCS Gold Layer 
 <br> c) Table 3: A Temporary table used by Dataform to hold the single latest known records 
 
-### Tables in Data Warehouse Dataset: 
+#### Tables in Data Warehouse Dataset: 
 a) Table 1: A Dimension Table storing static or slowly changing attributes for master data
 <br> b) Table 2: A Fact Table storing the final, business-ready hourly aggregated metrics and Primary source for BI trend analysis
 <br> c) Table 3: A Fact Table storing the final latest known state for each master data and Primary source for "Current Status" BI visuals
@@ -198,12 +198,12 @@ One Looker Studio Dashboard to display pre-MLOps data visualizations such as tre
 
 Two AI Agents built using Vertex AI Studio UI: 
 
-### <br>1. AI Agent 1: The BI Analyst Agent
+#### <br>1. AI Agent 1: The BI Analyst Agent
 This agent transforms natural language business questions into actionable SQL queries against the structured Data Warehouse.
 Allows business users to query the Data Warehouse using natural language. 
 
 
-### <br>2. AI Agent 2: The Data Governance Agent
+#### <br>2. AI Agent 2: The Data Governance Agent
 This agent answers questions about data compliance and structure by querying the centralized metadata catalog.
 Answer questions regarding metadata, security, and lineage. 
 <br>For ex: 
