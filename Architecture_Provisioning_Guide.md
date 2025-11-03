@@ -8,21 +8,21 @@ Setup the GCP Project and set the regional context to the target Region for all 
 
 ## <br> 2. API Enablement: 
 Enable all necessary APIs such as: 
-<br>* **Data Lake Storage** ->	Cloud Storage API	-> `storage.googleapis.com`
-<br>* **Real-Time Orchestration** -> Cloud Functions API -> `cloudfunctions.googleapis.com`
-<br>* **Messaging Queue** -> Cloud Pub/Sub API -> `pubsub.googleapis.com`
-<br>* **Scheduler/Trigger** -> Cloud Scheduler API -> `cloudscheduler.googleapis.com`
-<br>* **Data Warehouse** -> BigQuery API -> `bigquery.googleapis.com`
-<br>* **ELT Orchestration** -> Dataform API -> `dataform.googleapis.com`
-<br>* **BQ External Connections** -> BigQuery Connection API -> `bigqueryconnection.googleapis.com`
-<br>* **BQ Transfers** -> BigQuery Data Transfer API -> `bigquerydatatransfer.googleapis.com`
-<br>* **Unified AI Platform** -> Vertex AI API -> `aiplatform.googleapis.com`
-<br>* **Notebooks/Development** -> Notebooks API -> `notebooks.googleapis.com`
-<br>* **Container Registry** -> Artifact Registry API -> `artifactregistry.googleapis.com`
-<br>* **Underlying Compute** -> Compute Engine API -> `compute.googleapis.com`
-<br>* **Underlying Compute** -> Compute Engine API -> `compute.googleapis.com`
-<br>* **Data Fabric/Catalog** -> Cloud Dataplex API -> `dataplex.googleapis.com`
-<br>* **PII Scanning** -> Sensitive Data Protection (DLP) -> `dlp.googleapis.com`
+<br>a) **Data Lake Storage** ->	Cloud Storage API	-> `storage.googleapis.com`
+<br>b) **Real-Time Orchestration** -> Cloud Functions API -> `cloudfunctions.googleapis.com`
+<br>c) **Messaging Queue** -> Cloud Pub/Sub API -> `pubsub.googleapis.com`
+<br>d) **Scheduler/Trigger** -> Cloud Scheduler API -> `cloudscheduler.googleapis.com`
+<br>e) **Data Warehouse** -> BigQuery API -> `bigquery.googleapis.com`
+<br>f) **ELT Orchestration** -> Dataform API -> `dataform.googleapis.com`
+<br>g) **BQ External Connections** -> BigQuery Connection API -> `bigqueryconnection.googleapis.com`
+<br>h) **BQ Transfers** -> BigQuery Data Transfer API -> `bigquerydatatransfer.googleapis.com`
+<br>i) **Unified AI Platform** -> Vertex AI API -> `aiplatform.googleapis.com`
+<br>j) **Notebooks/Development** -> Notebooks API -> `notebooks.googleapis.com`
+<br>k) **Container Registry** -> Artifact Registry API -> `artifactregistry.googleapis.com`
+<br>l) **Underlying Compute** -> Compute Engine API -> `compute.googleapis.com`
+<br>m) **Underlying Compute** -> Compute Engine API -> `compute.googleapis.com`
+<br>n) **Data Fabric/Catalog** -> Cloud Dataplex API -> `dataplex.googleapis.com`
+<br>o) **PII Scanning** -> Sensitive Data Protection (DLP) -> `dlp.googleapis.com`
 
 ---
 
