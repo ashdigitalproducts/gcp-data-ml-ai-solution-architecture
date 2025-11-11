@@ -78,18 +78,6 @@ This Dataform SQLX script File read the latest state snapshot data from the Stag
 
 ---
 
-### <br> 2.11. End-to-End Flow
-- **Source Declaration (SQLX)** → Declared the external table over Bronze Layer JSONL files, providing a persistent SQL interface for raw ingested data.  
-- **Bronze → Silver Transformation (SQLX)** → Applied cleaning, standardization, type casting, and deduplication rules to produce curated Silver tables.  
-- **Silver → GCS Export (SQLX)** → Executed `EXPORT DATA` commands to write cleaned Silver tables into the GCS Silver Layer as partitioned Parquet files for ML feature engineering.  
-- **Silver → Gold Aggregation (SQLX)** → Performed hourly aggregations and state tracking on curated Silver data to generate intermediate Gold tables.  
-- **Gold → GCS Export (SQLX)** → Exported aggregated and latest state Gold tables into the GCS Gold Layer as Parquet files for BI and reporting.  
-- **Silver → Dimension & Fact Modeling (SQLX)** → Created Dimension tables and loaded Fact Hourly and Fact Latest tables into the BigQuery Data Warehouse.  
-- **Outputs** → Curated Parquet files in Silver and Gold Layers → Dimension and Fact tables in the Data Warehouse → Canonical data sources for Looker Studio dashboards and downstream MLOps pipelines.
-
-
----
-
 ##  <br> 🚀 3. MLOps Training Pipeline & Automation
 The Files that contained the logic for running the end-to-end MLOps Pipeline were a combination of a JupyterLab Notebook with Python Code, a Machine Learning Model Training Python Code file, a Docker file, a Python dependencies File and the Custom Job Configuration File.
 
@@ -101,7 +89,7 @@ This interactive Notebook was the development lab for prototyping the end‑to�
 - Engineered prototype features (rolling averages, categorical encodings, lag features).  
 - Trained a `RandomForestClassifier` on a sample dataset and evaluated performance with accuracy, ROC, and confusion matrix.  
 - Submitted a one‑off Batch Prediction job using the Vertex AI Python SDK (`aiplatform.BatchPredictionJob.create`) to validate integration with BigQuery.  
-- Served as the scratchpad for experimentation before productionizing the logic into `train.py`.
+- Served as the scratchpad for experimentation before productionizing the logic into Model Training.
 
 ---
 
@@ -112,10 +100,6 @@ This Python script was the production‑ready training entrypoint.
 - Loaded cleaned Parquet files from the Silver Layer (via GCSFS or BigQuery).  
 - Applied deterministic feature engineering: type casting, scaling, encoding, and feature selection.  
 - Trained a `RandomForestClassifier` with fixed random seeds for reproducibility.  
-- Evaluated the model on a validation split and logged metrics.  
-- Serialized the trained model with `joblib.dump()` into a local `/model` directory.  
-- Uploaded the serialized artifact to the Gold Layer bucket under `model_output/`.  
-- Registered the artifact into the Vertex AI Model Registry as a new version under the display name.
 
 ---
 
@@ -125,7 +109,7 @@ This file defined the container environment for the training job.
 - Started from a lightweight Python base image (e.g., `python:3.9-slim`).  
 - Copied `requirements.txt` into the image and installed dependencies with `pip install -r requirements.txt`.  
 - Copied `train.py` into the working directory.  
-- Set the container entrypoint to `python train.py` so Vertex AI Custom Jobs could pass runtime arguments.  
+- Set the container entrypoint to Training Model so Vertex AI Custom Jobs could pass runtime arguments.  
 - Guaranteed reproducibility and portability of the training environment.
 
 ---
@@ -155,10 +139,10 @@ This YAML file defined the runtime configuration for launching the training job 
 ---
 
 ### <br> 3.6. End-to-End Flow
-- **Notebook (`rainy_days_ml_prototype.ipynb`)** → Feature discovery, prototyping, and validation.  
-- **Training Script (`train.py`)** → Productionized training logic with reproducible feature engineering and model saving.  
-- **Dockerfile + requirements.txt** → Packaged the training environment into a container image stored in Artifact Registry.  
-- **config.yaml** → Defined the execution environment and launched the container as a Vertex AI Custom Job.  
+- **Notebook** → Feature discovery, prototyping, and validation.  
+- **Training Script** → Productionized training logic with reproducible feature engineering and model saving.  
+- **Dockerfile + Requirements** → Packaged the training environment into a container image stored in Artifact Registry.  
+- **Configuration file** → Defined the execution environment and launched the container as a Vertex AI Custom Job.  
 - **Outputs** → Model artifact saved to the Gold Layer → Registered in Vertex AI Model Registry → Consumed by Batch Prediction jobs → Predictions written back into BigQuery for BI dashboards.
 
 ---
@@ -183,7 +167,7 @@ This function is responsible for ensuring the transformed data is ready in the D
 - Purpose: This entirely eliminates the manual execution step of the Dataform pipeline, ensuring immediate data transformation readiness once the raw files are present.
 
 
-### <br> 4.2. MLOps Batch Scorer: prediction_trigger_main.py
+### <br> 4.2. MLOps Batch Scorer:  
 This function is responsible for launching the daily predictive scoring run using the trained model, completing the MLOps automation loop.
 
 - Trigger: Launched by the dedicated MLOps Cloud Scheduler Job, which is scheduled to run daily (e.g., 1 AM UTC).
@@ -194,7 +178,7 @@ This function is responsible for launching the daily predictive scoring run usin
 - - Uses the google-cloud-aiplatform SDK.
 - - The script first queries the Vertex AI Model Registry to find the latest version of the registered car failure model.
 - - It then defines and submits a Vertex AI Batch Prediction Job by calling aiplatform.BatchPredictionJob.create.
-- - The job is configured to use the fact_telemetry_latest table in the BigQuery DWH as its input source and the DWH dataset as its output sink.
+- - The job is configured to use the fact table in the BigQuery DWH as its input source and the DWH dataset as its output sink.
 
 - Purpose: This fully automates the daily prediction and scoring process, ensuring the Looker Studio dashboards always display fresh, ML-generated risk scores without any human intervention.
 
