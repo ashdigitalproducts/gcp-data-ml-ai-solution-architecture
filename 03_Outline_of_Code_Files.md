@@ -41,40 +41,8 @@ There were 2 `.txt` format files with Python Code in them.
 ---
 
 ##  <br> 🚀 2. Dataform ELT Pipeline
-There were 10 Dataform SQLX script Files with .sqlx extension that defined the data transformations within the Medallion Architecture. 
+There were Dataform SQLX script Files with .sqlx extension that defined the data transformations within the Medallion Architecture. 
 There was 1 Project configuration Json File that provided Project configuration, default schema, database, and variables. 
-
-
-### <br> 2.1. Dataform SQLX script File for Source Declaration: 
-This first Dataform SQLX script File declared the External Table as the Source. 
- 
-### <br> 2.2. Dataform SQLX script File for Bronze -> Silver cleanup and standardization: 
-This Dataform SQLX script File defined the Bronze-to-Silver transformation step. 
-<br> Its primary function was to read the raw, unvalidated data from GCS Bronze Layer Bucket's entry point and apply crucial cleaning, standardization, and type casting rules before making the data available for analytics and machine learning.
-
-### <br> 2.3. Dataform SQLX script File for Bronze -> Exports cleaned Silver table to GCS Parquet: 
-This Dataform SQLX script File executed the EXPORT DATA command, taking the data from that newly created internal BQ table and write it out to the GCS Silver Layer Bucket as Parquet files.
-
-### <br> 2.4. Dataform SQLX script File for Silver -> Gold hourly aggregation: 
-This Dataform SQLX script File read the cleaned data from the Silver Layer and performed hourly aggregations on key operational metrics per Master Data.
-
-### <br> 2.5. Dataform SQLX script File for Silver -> Exports Gold aggregates to GCS Parquet: 
-This Dataform SQLX script File executed the EXPORT DATA command to write the hourly aggregated data from the intermediate BQ Gold table out to the GCS Gold Layer as Parquet files.
-
-### <br> 2.6. Dataform SQLX script File for Silver -> Calculates latest known state per car: 
-This Dataform SQLX script File used a window function to identify and store the single, most recent telemetry record for every Master Data, serving the "Current Status" BI visuals.
-
-### <br> 2.7. Dataform SQLX script File for Silver -> Exports Gold latest state to GCS Parquet: 
-This Dataform SQLX script File executed the EXPORT DATA command to write the latest state snapshots from the intermediate BQ Gold table out to the GCS Gold Layer as Parquet files.
-
-### <br> 2.8. Dataform SQLX script File for Silver -> Creates Dimension table in Data Warehouse: 
-This Dataform SQLX script File created the Dimension table in the BigQuery Data Warehouse to store car Master Data attributes, generating a unique key for use as a foreign key.
-
-### <br> 2.9. Dataform SQLX script File for Silver -> Loads hourly aggregates into Data Warehouse Fact table: 
-This Dataform SQLX script File read the hourly aggregated data from the Staging table (which mirrored the Gold output) and loaded it into the final Fact hourly table in the BigQuery Data Warehouse.
-
-### <br> 2.10. Dataform SQLX script File for Silver -> Loads latest state into Data Warehouse Fact table: 
-This Dataform SQLX script File read the latest state snapshot data from the Staging table and loaded it into the final Fact latest data table in the BigQuery Data Warehouse.
 
 ---
 
